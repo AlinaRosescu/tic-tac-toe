@@ -1,0 +1,85 @@
+* {
+	font-family: 'PT Sans', sans-serif;
+	font-size: 1em;
+
+}
+
+.container {
+	margin: 0 auto;
+	text-align: center;
+}
+h1 {
+	margin: 70px 0 10px;
+	padding: 0;
+	color: #09958d;
+	font-size: 3em;
+	line-height: 1.2;
+	font-weight: bold;
+}
+
+h2 {
+	margin: 15px 0 40px;
+	padding:0;
+	color: #09958d;
+	font-size: 2em;
+}
+
+#start, #restart {
+	padding: 10px 15px;
+	margin-bottom: 30px;
+	font-weight: bold;
+	font-size: 1.25em;
+	background-color: #fc2c54;
+	color: #89192e;
+	border-radius: 10px;
+	border: solid 1px #fc2c54;
+}
+
+#start:hover, #restart:hover {
+	background-color: #89192e;
+	color: #fc2c54;
+	border: solid 1px #89192e;
+}
+
+#restart {
+	display: none;
+	margin: 0 auto 30px;
+}
+
+#grid {
+	display: none;
+	margin: 0 auto;
+	width: 300px;
+	height: 300px;
+	border: solid 1px #076762;
+	padding:0;
+}
+
+#grid div {
+	box-sizing: border-box;
+	border: solid 2px #076762;
+	display: inline-block;
+	float: left;
+	margin: 0;
+	padding: 0;
+	width: 100px;
+	height: 100px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#grid div p {
+	font-family: 'Sriracha', cursive;
+	margin: 0;
+	padding:0;
+	font-size: 2.5em;
+	line-height: 2.5;
+	font-weight: bold;
+}
+
+.result p {
+	font-size: 1.5em;
+	line-height: 1.5;
+	font-weight: bold;
+}
+

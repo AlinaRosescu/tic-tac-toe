@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tic-Tac-Toe</title>
+		<meta charset="UTF-8">
+      <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Sriracha" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="styles.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+      <div class="container">
+         <h1>Tic Tac Toe</h1>
+         <h2>Do you wanna play a game?</h2>
+         <button name="start" type="button" id="start">Start game</button>
+         <button name="restart" type="button" id="restart">Restart game</button>
+         <div id="grid">
+         </div>
+         <div class="result">
+         </div>
+      </div>
+
+	<script rel="javascript">
+      var game;
+      var turn;
+      var result;
+      var state;
+      var gameGrid = [];
+
+      //create game 3x3 grid
+      function createGrid() {
+         if ($("#grid").children("div").length > 0) {
+            $("#grid").empty();
+            $(".result").empty();
+         }
+         $("#grid").css("display", "block");
+         $("#start").css("display", "none");
+         $("#restart").css("display", "block");
+         for (var i = 0; i < 9; i++) {
+            var square = document.createElement("div");
+            document.getElementById("grid").appendChild(square);
+            square.id = i;
+            gameGrid[i] = "E";
+         }
+         game = true;
+      }
+
+
+      function startGame() {
+         game = false;
+         turn = "user";
+         result = null;
+         status = "playing";
+         gameGrid = [];
+         createGrid();
+
+         for (var i = 0; i < 9; i++) {
+            if (game !== false && status !== "over") {
+               $("#grid").on("click", "div", function() {
+                  if (!($(this).attr("disabled"))) {
+                     $(this).html("<p>X</p>");
+                     $(this).css("color", "#09958d");
+                     $(this).attr("disabled", "true");
+                     var cell = $(this).attr("id");
+                     gameGrid[cell] = "X";
+                     checkResults();
+                     if (status !== "over") {
+                        movePlayer2();
+                     }
+                  }
+               });
+            }
+         }
+      }
+
+      function movePlayer2() {
+         var choice;
+         var divId;
+         var chosenDiv;
+         var isAvailable = false;
+
+         for (var i = 0; i < 9; i++) {
+            choice = Math.floor(Math.random() * (8 - 0 + 1)) + 0;
+            divId = choice.toString();
+            chosenDiv = $(document.getElementById(divId));
+            if (!(chosenDiv.attr("disabled"))) {
+               isAvailable = true;
+               chosenDiv.html("<p>0</p>").delay(1000);
+               chosenDiv.css("color", "#fc2c54");
+               chosenDiv.attr("disabled", "true");
+               gameGrid[choice] = "0";
+               checkResults();
+               break;
+            }
+         }
+      }
+
+      function checkResults() {
+         if (gameGrid[0] === "X" && gameGrid[1] === "X" && gameGrid[2] === "X"){
+            endGame("X");
+         } else if (gameGrid[0] === "0" && gameGrid[1] === "0" && gameGrid[2] === "0") {
+            endGame("0");
+         } else if (gameGrid[3] === "X" && gameGrid[4] === "X" && gameGrid[5] === "X") {
+            endGame("X");
+         } else if (gameGrid[3] === "0" && gameGrid[4] === "0" && gameGrid[5] === "0") {
+            endGame("0");
+         } else if (gameGrid[6] === "X" && gameGrid[7] === "X" && gameGrid[8] === "X") {
+            endGame("X");
+         } else if (gameGrid[6] === "0" && gameGrid[7] === "0" && gameGrid[8] === "0") {
+            endGame("0");
+         } else if (gameGrid[0] === "X" && gameGrid[3] === "X" && gameGrid[6] === "X") {
+            endGame("X");
+         } else if (gameGrid[0] === "0" && gameGrid[3] === "0" && gameGrid[6] === "0") {
+            endGame("0");
+         } else if (gameGrid[1] === "X" && gameGrid[4] === "X" && gameGrid[7] === "X") {
+            endGame("X");
+         } else if (gameGrid[1] === "0" && gameGrid[4] === "0" && gameGrid[7] === "0") {
+            endGame("0");
+         } else if (gameGrid[2] === "X" && gameGrid[5] === "X" && gameGrid[8] === "X") {
+            endGame("X");
+         } else if (gameGrid[2] === "0" && gameGrid[5] === "0" && gameGrid[8] === "0") {
+            endGame("0");
+         } else if (gameGrid[0] === "X" && gameGrid[4] === "X" && gameGrid[8] === "X") {
+            endGame("X");
+         } else if (gameGrid[0] === "0" && gameGrid[4] === "0" && gameGrid[8] === "0") {
+            endGame("0");
+         }else if (gameGrid[2] === "X" && gameGrid[4] === "X" && gameGrid[6] === "X") {
+            endGame("X");
+         } else if (gameGrid[2] === "0" && gameGrid[4] === "0" && gameGrid[6] === "0") {
+            endGame("0");
+         } else {
+            for (var i = 0; i < 9; i++) {
+               if (gameGrid[i] === "E") {
+                  game = true;
+                  break;
+               }
+            }
+         }
+      }
+
+      function endGame(val) {
+         game = false;
+         status = "over";
+         $("#grid").off("click", "div");
+         if (val == "X" || val == "0") {
+            if (val == "X") {
+               $(".result").css("color", "#09958d");
+            } else if (val == "0") {
+               $(".result").css("color", "#fc2c54");
+            }
+            $(".result").append("<p>" + val +" HAS WON</p>");
+         } else {
+            $(".result").append("<p>" + val +"</p>");
+            $(".result").css("color", "#076762");
+         }
+      }
+
+
+      $(".container").on("click", "button", startGame);
+
+
+	</script>
+	</body>
+</html>
