@@ -22,23 +22,15 @@
 
 	<script rel="javascript">
       var game = false;
-      var player;
-      var divId;
       var status;
+      var currentPlayer;
+      var divId;
       var round;
+      var result;
       var gameGrid = [];
-      var firstUserMove;
-      var winCases = [
-         ["0","1","2"],
-         ["3","4","5"],
-         ["6","7","8"],
-         ["0","3","6"],
-         ["1","4","7"],
-         ["2","5","8"],
-         ["2","4","6"],
-         ["0","4","8"]
-      ];
       var updatedWinCases;
+      var winCases = [];
+
 
       $(".container").on("click", "button", startGame);
 
@@ -47,9 +39,19 @@
          game = true;
          round = 1;
          status = "playing";
+         winCases = [
+            ["0","1","2"],
+            ["3","4","5"],
+            ["6","7","8"],
+            ["0","3","6"],
+            ["1","4","7"],
+            ["2","5","8"],
+            ["2","4","6"],
+            ["0","4","8"]
+         ];
          createGrid();
 
-         for (var i = 1; i <= 5; i++) {
+         for (let i = 1; i <= 5; i++) {
             if (game !== false) {
                movePlayer1();
             }
@@ -61,11 +63,13 @@
          if ($("#grid").children("div").length > 0) {
             $("#grid").empty();
             $(".result").empty();
+            updatedWinCases.length = 0;
          }
+
          $("#grid").css("display", "block");
          $("#start").css("display", "none");
          $("#restart").css("display", "block");
-         for (var i = 0; i < 9; i++) {
+         for (let i = 0; i < 9; i++) {
             var square = document.createElement("div");
             document.getElementById("grid").appendChild(square);
             square.id = i;
@@ -75,9 +79,8 @@
 
       // register user clicks and moves
       function movePlayer1() {
-
          $("#grid").on("click", "div", function() {
-            player = "X";
+            currentPlayer = "X";
             if (!($(this).attr("disabled"))) {
                $(this).html("<p>X</p>");
                $(this).css("color", "#09958d");
@@ -86,85 +89,117 @@
                gameGrid[divId] = "X";
 
                updatedWinCases = winCases.map(updateWinCases);
+               checkResults(currentPlayer);
 
-               checkResults("X");
-
-               if (round === 1) {
-                  firstUserMove = divId;
-               }
                if (status !== "over") {
-                  movePlayer2(round, divId);
-                  round++;
+                  movePlayer2(divId);
                }
-
             }
          });
       }
 
 
-      function movePlayer2(round, userMove) {
+      function movePlayer2(userMove) {
          var chosenDiv;
          var isAvailable = false;
          var userChoice = parseInt(userMove);
-         player = "O";
-
+         currentPlayer = "O";
 
          switch(round) {
             case 1:
                if (userChoice !== 4) {
-                  chosenDiv = $(document.getElementById("4"));
                   divId = 4;
-                  updatedWinCases = winCases.map(updateWinCases);
+                  checkIsDivAvailable(divId);
                } else if (userChoice === 4) {
                   do {
-                     divId = Math.floor(Math.random() * (8 - 0 + 1)) + 0;
-                     if (divId !== 4 && divId % 2 === 0) {
-                        chosenDiv = $(document.getElementById(divId));
-                        updatedWinCases = winCases.map(updateWinCases);
+                     var randomId = Math.floor(Math.random() * (8 - 0 + 1)) + 0;
+                     if (randomId !== 4 && randomId % 2 === 0) {
+                        divId = randomId;
+                        checkIsDivAvailable(divId);
                         break;
                      }
-                  } while (divId % 2 !== 0);
+                  } while (randomId === 4 || randomId % 2 !== 0);
                }
                break;
             case 2:
             case 3:
             case 4:
-               for (let i = 0; i < updatedWinCases.length; i++) {
-                  if (updatedWinCases[i][0] === "X") {
-                     if (updatedWinCases[i][1] === "X" &&  updatedWinCases[i][2] !== "O") {
-                        divId = updatedWinCases[i][2];
-                        break;
-                     } else if (updatedWinCases[i][2] === "X" &&  updatedWinCases[i][1] !== "O") {
-                        divId = updatedWinCases[i][1];
-                        break;
-                     }
-                  } else if (updatedWinCases[i][1] === "X") {
-                     if (updatedWinCases[i][2] === "X" &&  updatedWinCases[i][0] !== "O") {
-                        divId = updatedWinCases[i][0];
-                        break;
+               var one = "X";
+               var two = "O";
+
+               for (let j = 1; j < 3; j++) {
+                  for (let i = 0; i < updatedWinCases.length; i++) {
+                     if (updatedWinCases[i][0] === one) {
+                        if (updatedWinCases[i][1] === one &&  updatedWinCases[i][2] !== two) {
+                           divId = updatedWinCases[i][2];
+                           checkIsDivAvailable(divId);
+                           break;
+                        } else if (updatedWinCases[i][2] === one &&  updatedWinCases[i][1] !== two) {
+                           divId = updatedWinCases[i][1];
+                           checkIsDivAvailable(divId);
+                           break;
+                        }
+                     } else if (updatedWinCases[i][1] === one) {
+                        if (updatedWinCases[i][2] === one &&  updatedWinCases[i][0] !== two) {
+                           divId = updatedWinCases[i][0];
+                           checkIsDivAvailable(divId);
+                           break;
+                        }
                      }
                   }
+                  if (!isAvailable) {
+                     var one = "O";
+                     var two = "X";
+                  }
                }
-               console.log(divId);
-               chosenDiv = $(document.getElementById(divId));
-               updatedWinCases = winCases.map(updateWinCases);
+
+               if (!isAvailable)  {
+                  do {
+                     for (let i = 0; i < updatedWinCases.length; i++) {
+                        for (let j = 0; j < updatedWinCases[i].length; j++) {
+                           if (updatedWinCases[i][j] !== one && updatedWinCases[i][j] !== two) {
+                              divId = updatedWinCases[i][j];
+                              checkIsDivAvailable(divId);
+                              break;
+                           }
+                        }
+                        if (isAvailable) {
+                           break;
+                        }
+                     }
+                  } while(!isAvailable);
+               }
                break;
          }
 
-         if (!(chosenDiv.attr("disabled"))) {
-            chosenDiv.html("<p>0</p>").delay(1000);
+         if (isAvailable) {
+            chosenDiv.html("<p>0</p>").delay(800);
             chosenDiv.css("color", "#fc2c54");
             chosenDiv.attr("disabled", "true");
-            gameGrid[divId] = "0";
-            checkResults("0");
+            gameGrid[divId] = "O";
+            round++;
+            updatedWinCases = winCases.map(updateWinCases);
+            checkResults(currentPlayer);
+         }
+
+         // check if selected div is empty
+         function checkIsDivAvailable(div) {
+            chosenDiv = $(document.getElementById(div));
+            if (!(chosenDiv.attr("disabled"))) {
+               isAvailable = true;
+            } else {
+               isAvailable = false;
+            }
+            return isAvailable;
          }
       }
 
 
+      //update the win case array with player's moves
       function updateWinCases(item) {
-         for (var i = 0; i < item.length; i++) {
-            if (item[i] === divId) {
-               item[i] = player;
+         for (let i = 0; i < item.length; i++) {
+            if (item[i] == divId) {
+               item[i] = currentPlayer;
             }
          }
          return item;
@@ -179,21 +214,17 @@
             }
          })
 
-      /*if (gameGrid[0] === player && gameGrid[4] === player && gameGrid[8] === player){
-         endGame(player);
-      } else if (gameGrid[2] === player && gameGrid[4] === player && gameGrid[6] === player) {
-         endGame(player);
-      } else {
-         for (var i = 0; i < 9; i++) {
+         for (let i = 0; i < 9; i++) {
             if (gameGrid[i] === "E") {
                game = true;
                break;
             } else if (gameGrid[i] !== "E" && i === 8) {
                endGame("It's a draw");
+               break;
             }
          }
-      }*/
       }
+
 
       //if game has ended alert the user of the result
       function endGame(result) {
@@ -201,19 +232,18 @@
          status = "over";
 
          $("#grid").off("click", "div");
-         if (result === "X" || result === "0") {
+         if (result === "X" || result === "O") {
             if (result === "X") {
                $(".result").css("color", "#09958d");
-            } else if (result === "0") {
+            } else if (result === "O") {
                $(".result").css("color", "#fc2c54");
             }
-            $(".result").append("<p>" + result +" HAS WON</p>");
+            $(".result").append("<p>" + result +" has won!</p>");
          } else {
-            $(".result").append("<p>" + result +"</p>");
+            $(".result").append("<p>" + result + "</p>");
             $(".result").css("color", "#076762");
          }
       }
-
 
 
 	</script>
