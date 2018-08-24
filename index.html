@@ -30,8 +30,10 @@
       var gameGrid = [];
       var updatedWinCases;
       var winCases = [];
+      var chosenDiv;
+      var isAvailable = false;
 
-
+      //start game
       $(".container").on("click", "button", startGame);
 
       //initialize variables and add click event on grid
@@ -98,10 +100,8 @@
          });
       }
 
-
+      //make computer moves
       function movePlayer2(userMove) {
-         var chosenDiv;
-         var isAvailable = false;
          var userChoice = parseInt(userMove);
          currentPlayer = "O";
 
@@ -126,72 +126,84 @@
             case 4:
                var one = "X";
                var two = "O";
+               var block =  false;
+               var win = false;
+               var divIdBlock;
+               var divIdWin;
 
-               for (let j = 1; j < 3; j++) {
-                  for (let i = 0; i < updatedWinCases.length; i++) {
-                     if (updatedWinCases[i][0] === one) {
-                        if (updatedWinCases[i][1] === one &&  updatedWinCases[i][2] !== two) {
-                           divId = updatedWinCases[i][2];
-                           checkIsDivAvailable(divId);
-                           break;
-                        } else if (updatedWinCases[i][2] === one &&  updatedWinCases[i][1] !== two) {
-                           divId = updatedWinCases[i][1];
-                           checkIsDivAvailable(divId);
-                           break;
+               //go through the updated win cases twice
+               for (let i = 1; i < 3; i++) {
+                  updatedWinCases.forEach(function (element) {
+                     if (element[0] === one) {
+                        if (element[1] === one &&  element[2] !== two) {
+                           divId = element[2];
+                        } else if (element[2] === one &&  element[1] !== two) {
+                           divId = element[1];
                         }
-                     } else if (updatedWinCases[i][1] === one) {
-                        if (updatedWinCases[i][2] === one &&  updatedWinCases[i][0] !== two) {
-                           divId = updatedWinCases[i][0];
-                           checkIsDivAvailable(divId);
-                           break;
+                     } else if (element[1] === one) {
+                        if (element[2] === one &&  element[0] !== two) {
+                           divId = element[0];
                         }
                      }
+                  })
+
+                  //check if either X or O is about to win
+                  if (one === "X") {
+                     block = true;
+                     divIdBlock = divId;
+                     checkIsDivAvailable(divIdBlock);
+                  } else if (one === "O") {
+                     win = true;
+                     divIdWin = divId;
+                     checkIsDivAvailable(divIdWin);
                   }
-                  if (!isAvailable) {
-                     var one = "O";
-                     var two = "X";
-                  }
+                  var one = "O";
+                  var two = "X";
                }
 
+               //if both have a chance to win choose to win else choose to block
+               if (win === true) {
+                  chosenDiv = $(document.getElementById(divIdWin));
+               } else if (block === true){
+                  chosenDiv = $(document.getElementById(divIdBlock));
+               }
+
+               //if neither have a chance to win place O in the first available div
                if (!isAvailable)  {
                   do {
-                     for (let i = 0; i < updatedWinCases.length; i++) {
-                        for (let j = 0; j < updatedWinCases[i].length; j++) {
-                           if (updatedWinCases[i][j] !== one && updatedWinCases[i][j] !== two) {
-                              divId = updatedWinCases[i][j];
+                     updatedWinCases.forEach(function (element) {
+                        for (let i = 0; i < element.length; i++) {
+                           if (element[i] !== one && element[i] !== two) {
+                              divId = element[i];
                               checkIsDivAvailable(divId);
                               break;
                            }
                         }
-                        if (isAvailable) {
-                           break;
-                        }
-                     }
+                     })
                   } while(!isAvailable);
                }
                break;
-         }
+         }//close switch
 
-         if (isAvailable) {
-            chosenDiv.html("<p>0</p>").delay(800);
-            chosenDiv.css("color", "#fc2c54");
-            chosenDiv.attr("disabled", "true");
-            gameGrid[divId] = "O";
-            round++;
-            updatedWinCases = winCases.map(updateWinCases);
-            checkResults(currentPlayer);
-         }
+         //select div where to add O
+         chosenDiv.html("<p>0</p>").delay(800);
+         chosenDiv.css("color", "#fc2c54");
+         chosenDiv.attr("disabled", "true");
+         gameGrid[divId] = "O";
+         round++;
+         updatedWinCases = winCases.map(updateWinCases);
+         checkResults(currentPlayer);
+      }
 
-         // check if selected div is empty
-         function checkIsDivAvailable(div) {
-            chosenDiv = $(document.getElementById(div));
-            if (!(chosenDiv.attr("disabled"))) {
-               isAvailable = true;
-            } else {
-               isAvailable = false;
-            }
-            return isAvailable;
+      // check if selected div is available
+      function checkIsDivAvailable(div) {
+         chosenDiv = $(document.getElementById(div));
+         if (!(chosenDiv.attr("disabled"))) {
+            isAvailable = true;
+         } else {
+            isAvailable = false;
          }
+         return isAvailable;
       }
 
 
@@ -205,22 +217,20 @@
          return item;
       }
 
-      //check if either player has won or the game ends in a draw
+      //check if either player has won, the game ends in a draw or game is still going
       function checkResults(player) {
-
          updatedWinCases.forEach(function (element) {
             if (element[0] === player && element[1] === player && element[2] === player) {
                endGame(player);
             }
          })
 
-         for (let i = 0; i < 9; i++) {
+         for (let i = 0; i < gameGrid.length; i++) {
             if (gameGrid[i] === "E") {
                game = true;
                break;
             } else if (gameGrid[i] !== "E" && i === 8) {
                endGame("It's a draw");
-               break;
             }
          }
       }
