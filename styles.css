@@ -1,18 +1,18 @@
 * {
 	font-family: 'PT Sans', sans-serif;
 	font-size: 1em;
-
 }
 
 .container {
 	margin: 0 auto;
 	text-align: center;
 }
+
 h1 {
 	margin: 70px 0 10px;
 	padding: 0;
 	color: #09958d;
-	font-size: 3em;
+	font-size: 5em;
 	line-height: 1.2;
 	font-weight: bold;
 }
@@ -21,14 +21,14 @@ h2 {
 	margin: 15px 0 40px;
 	padding:0;
 	color: #09958d;
-	font-size: 2em;
+	font-size: 3.125em;
 }
 
 #start, #restart {
-	padding: 10px 15px;
+	padding: 15px 20px;
 	margin-bottom: 30px;
 	font-weight: bold;
-	font-size: 1.25em;
+	font-size: 2em;
 	background-color: #fc2c54;
 	color: #89192e;
 	border-radius: 10px;
@@ -49,8 +49,8 @@ h2 {
 #grid {
 	display: none;
 	margin: 0 auto;
-	width: 300px;
-	height: 300px;
+	width: 450px;
+	height: 450px;
 	border: solid 1px #076762;
 	padding:0;
 }
@@ -62,8 +62,8 @@ h2 {
 	float: left;
 	margin: 0;
 	padding: 0;
-	width: 100px;
-	height: 100px;
+	width: 150px;
+	height: 150px;
 	text-align: center;
 	vertical-align: middle;
 }
@@ -83,3 +83,15 @@ h2 {
 	font-weight: bold;
 }
 
+@media (min-width: 768px) {
+	h1 {
+		font-size: 3em;
+	}
+	h2 {
+		font-size: 2em;
+	}
+	#grid {
+		width: 300px;
+		height: 300px;
+	}
+}
