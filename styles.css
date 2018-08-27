@@ -12,7 +12,7 @@ h1 {
 	margin: 1.125em 0 0.208em;
 	padding: 0;
 	color: #09958d;
-	font-size: 3em;
+	font-size: 2em;
 	line-height: 1.2;
 	font-weight: bold;
 }
@@ -21,14 +21,14 @@ h2 {
 	margin: 0 0 1.25em;
 	padding: 0;
 	color: #09958d;
-	font-size: 2em;
+	font-size: 1.5em;
 }
 
 #start, #restart {
 	padding: 10px 15px;
 	margin: 0 auto 30px;
 	font-weight: bold;
-	font-size: 2em;
+	font-size: 1.5em;
 	background-color: #fc2c54;
 	color: #89192e;
 	border-radius: 10px;
@@ -48,8 +48,8 @@ h2 {
 #grid {
 	display: none;
 	margin: 0 auto;
-	width: 28.125em;
-	height: 28.125em;
+	width: 18.75em;
+	height: 18.75em;
 	border: solid 1px #076762;
 	padding:0;
 }
@@ -61,8 +61,8 @@ h2 {
 	float: left;
 	margin: 0;
 	padding: 0;
-	width: 9.375em;
-	height: 9.375em;
+	width: 6.25em;
+	height: 6.25em;
 	text-align: center;
 	vertical-align: middle;
 }
@@ -71,7 +71,7 @@ h2 {
 	font-family: 'Sriracha', cursive;
 	margin: 0;
 	padding:0;
-	font-size: 3.5em;
+	font-size: 2.5em;
 	line-height: 2.5;
 	font-weight: bold;
 }
@@ -79,8 +79,42 @@ h2 {
 .result p {
 	margin: 0;
 	padding: 0.267em 0;
-	font-size: 3em;
+	font-size: 2.125em;
 	line-height: 1;
 	font-weight: bold;
 }
 
+
+@media (min-width: 480px) {
+	h1 {
+		font-size: 3em;
+	}
+
+	h2 {
+		font-size: 2em;
+	}
+
+	#start, #restart {
+		font-size: 2em;
+	}
+
+	#grid {
+		width: 28.125em;
+		height: 28.125em;
+	}
+
+	#grid div {
+		width: 9.375em;
+		height: 9.375em;
+	}
+
+	#grid div p {
+		font-size: 3.5em;
+		line-height: 2.5;
+	}
+
+	.result p {
+		font-size: 3em;
+		line-height: 1;
+	}
+}
