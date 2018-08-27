@@ -18,7 +18,7 @@ h1 {
 }
 
 h2 {
-	margin: 0 0 1.25em;
+	margin: 0 0 1em;
 	padding: 0;
 	color: #09958d;
 	font-size: 1.5em;
@@ -26,7 +26,7 @@ h2 {
 
 #start, #restart {
 	padding: 10px 15px;
-	margin: 0 auto 30px;
+	margin: 0 auto 15px;
 	font-weight: bold;
 	font-size: 1.5em;
 	background-color: #fc2c54;
@@ -78,7 +78,7 @@ h2 {
 
 .result p {
 	margin: 0;
-	padding: 0.267em 0;
+	padding: 0 0 0.3125em;
 	font-size: 2.125em;
 	line-height: 1;
 	font-weight: bold;
