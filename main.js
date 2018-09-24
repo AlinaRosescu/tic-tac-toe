@@ -160,3 +160,6 @@ function endGame(result) {
         $(".result").css("color", "#076762");
     }
 }
+$(document).ready(function() {
+        $(".container").on("click", "button", startGame);
+    })
