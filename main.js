@@ -11,6 +11,10 @@ var winCases = [
     ["0","4","8"]
 ];
 
+$(document).ready(function() {
+    $(".container").on("click", "button", startGame);
+});
+
 
 //initialize variables and add click event on grid
 function startGame() {
@@ -44,8 +48,7 @@ function movePlayer1() {
         $(this).css("color", "#09958d");
         $(this).html("<p>X</p>");
         gameGrid[selectedDivId] = "X";
-        var gameIsPlaying = checkResults(player);
-        if (gameIsPlaying) {
+        if (checkResults(player)) {
             movePlayer2(selectedDivId);
         }
     }
@@ -63,22 +66,12 @@ function movePlayer2(userMove) {
     } else if (round === 1 && userChoice === 4) {
         divId = getRandomNumber();
     } else {
-        var player1 = "O";
-        var player2 = "X";
-
-        for (let i = 0; i < 2; i++) {
-            divId = checkAvailableComputerMove(player1, player2,divId);
-            if (!divId) {
-                player1 = "X";
-                player2 = "O";
-            }
+        divId = checkAvailableComputerMove("O", "X",divId);
+        if (!divId) {
+            divId = checkAvailableComputerMove("X", "O",divId);
         }
-
         if (!divId)  {
-            for (let i = 0; i < gameGrid.length; i++) {
-                if (checkIsDivAvailable(i)) {
-                divId = i;
-            }
+            divId = gameGrid.findIndex(element => element === "E");
         }
     }
 
@@ -90,16 +83,10 @@ function movePlayer2(userMove) {
     checkResults(player);
 }
 
-//generate a random even number between 0 and 9
+//pick a random number from an array
 function getRandomNumber() {
-    var randomNr;
-    do {
-        randomNr = Math.floor(Math.random() * (8 - 0 + 1)) + 0;
-        if (checkIsDivAvailable(randomNr) && randomNr % 2 === 0) {
-
-            return randomNr;
-        }
-    } while (!checkIsDivAvailable(randomNr) || randomNr % 2 !== 0);
+    var evenNumbersArray = [0, 2, 6, 8];
+    return evenNumbersArray[Math.floor(Math.random() * evenNumbersArray.length)];
 }
 
 //check if computer can win or block
@@ -160,6 +147,3 @@ function endGame(result) {
         $(".result").css("color", "#076762");
     }
 }
-$(document).ready(function() {
-        $(".container").on("click", "button", startGame);
-    })
